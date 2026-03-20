@@ -90,14 +90,10 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "localhost",
-      reusePort: true,
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  // Use 0.0.0.0 in Docker/production so the container is reachable from the host.
+  // Fall back to localhost for native macOS dev (avoids ENOTSUP with reusePort).
+  const host = process.env.DOCKER === "true" ? "0.0.0.0" : "localhost";
+  httpServer.listen(port, host, () => {
+    log(`serving on port ${port}`);
+  });
 })();
