@@ -1,0 +1,30 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.yml — PRODUCTION
+#
+# Usage:
+#   docker compose up --build          # build + start
+#   docker compose up -d               # detached (background)
+#   docker compose down                # stop + remove containers
+#   docker compose logs -f poly-weather  # tail logs
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  poly-weather:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: poly-weather
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      DOCKER: "true"
+      PORT: "5000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/api/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

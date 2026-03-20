@@ -1,0 +1,31 @@
+# Dependencies — reinstalled inside the container
+node_modules
+
+# Build output — generated during docker build
+dist
+
+# Git
+.git
+.gitignore
+
+# Editor / OS
+.DS_Store
+*.log
+.vscode
+.cursor
+.idea
+
+# Environment files — inject via docker-compose environment: instead
+.env
+.env.*
+!.env.example
+
+# Test / dev artifacts
+coverage
+*.test.*
+*.spec.*
+
+# Docker files themselves (no need to copy into image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
